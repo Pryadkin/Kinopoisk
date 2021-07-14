@@ -32,4 +32,6 @@
     width: 150px;
     margin: 10px;
   }
+
+  /* .ant-card-bordered  */
 </style>

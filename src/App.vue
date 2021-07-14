@@ -15,7 +15,14 @@
 </template>
 
 <script lang="ts">
-  export default {
+  import Vue from 'vue'
+
+  interface Data {
+    mode: string
+    theme: string
+  }
+
+  export default Vue.extend<any, any, Data>({
     name: 'home',
     data() {
       return {
@@ -23,7 +30,7 @@
         theme: 'dark'
       }
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>

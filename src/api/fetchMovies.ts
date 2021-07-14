@@ -1,7 +1,7 @@
 import { api, api_key } from './baseUrl'
 import getFullPathForPosters from './helpers/getFullPathForPosters'
 
-export const fetchMovies = async (name: string, isWithPicture: boolean, page: number) => {
+export const fetchMovies = async (name: string, isWithPicture: boolean, page: number): Promise<any> => {
   const params = {
     api_key,
     query: name,

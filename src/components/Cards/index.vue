@@ -8,10 +8,11 @@
   </div>
 </template>
 
-<script>
-  import Card from './Card'
+<script lang="ts">
+  import Vue from 'vue'
+  import Card from './Card.vue'
 
-  export default {
+  export default Vue.extend<any, any, any, any>({
     props: {
       profileMovies: Array
     },
@@ -31,7 +32,7 @@
     mounted() {
       console.log(this.movies)
     }
-  }
+  })
 </script>
 
 <style scoped>

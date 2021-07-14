@@ -1,6 +1,18 @@
 import { fetchMovies } from '../../api/fetchMovies'
 
-export default {
+export interface State {
+  actions: {
+    getMovies: (ctx: any, payload: any) => void
+  }
+  mutations: any
+  state: {
+    foundMovies: []
+    foundMoviesCount: number
+  }
+  getters: any
+}
+
+export const search: State = {
   actions: {
     async getMovies(ctx: any, payload: any) {
       try {

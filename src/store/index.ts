@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { profile } from './modules/profile'
-import search from './modules/search'
+import { search } from './modules/search'
 
 Vue.use(Vuex)
 
