@@ -1,32 +1,39 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
+  <div class="app">
+    <a-menu class="mainMenu" :default-selected-keys="['1']" :default-open-keys="['sub1']" :mode="mode" :theme="theme">
+      <a-menu-item key="1" @click="$router.push({ name: 'Profile' })">
+        <a-icon type="home" />
+        My movies
+      </a-menu-item>
+      <a-menu-item key="2" @click="$router.push({ name: 'Search' })">
+        <a-icon type="search" />
+        Search
+      </a-menu-item>
+    </a-menu>
     <router-view />
   </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+<script lang="ts">
+  export default {
+    name: 'home',
+    data() {
+      return {
+        mode: 'inline',
+        theme: 'dark'
+      }
     }
   }
-}
+</script>
+
+<style lang="scss" scoped>
+  .app {
+    position: relative;
+    display: grid;
+    grid-template-columns: 0.25fr 1fr;
+  }
+  .mainMenu {
+    width: 256px;
+    height: 100vh;
+  }
 </style>
