@@ -19,10 +19,10 @@
     components: {
       ProfileCards
     },
-    methods: mapActions(['getProfileMovies']),
-    async mounted() {
-      this.getProfileMovies()
-    }
+    methods: mapActions(['getProfileMovies'])
+    // async mounted() {
+    //   this.getProfileMovies()
+    // }
   })
 </script>
 

@@ -3,7 +3,7 @@
     <div class="cards_container">
       <div class="row" v-for="movie in getMovies" :key="movie.id">
         <Card v-bind:movie="movie" />
-        <div class="cardCloseIcon">remove</div>
+        <div class="cardCloseIcon" @click="removeFromProfile(movie.id)">remove</div>
       </div>
     </div>
   </div>
@@ -12,6 +12,7 @@
 <script lang="ts">
   import Vue from 'vue'
   import Card from './Card.vue'
+  import { mapActions } from 'vuex'
 
   export default Vue.extend<any, any, any, any>({
     props: {
@@ -23,6 +24,12 @@
     computed: {
       getMovies() {
         return this.movies
+      }
+    },
+    methods: {
+      ...mapActions(['removeMovieFromProfile']),
+      removeFromProfile(id: number) {
+        this.removeMovieFromProfile(id)
       }
     }
   })
