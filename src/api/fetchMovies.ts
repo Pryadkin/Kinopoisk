@@ -25,5 +25,6 @@ export const fetchMovies = async (name: string, isWithPicture: boolean, page: nu
     return data
   } catch (err) {
     console.log(`😱 Axios request failed: ${err}`)
+    console.log({ name, isWithPicture, page })
   }
 }

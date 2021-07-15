@@ -1,34 +1,67 @@
 <template>
   <div class="searchWrapper">
-    <a-input-search placeholder="input search text" enter-button class="inputSearch" @search="onSearch" />
-    <a-pagination class="pagination" :default-current="6" :total="foundMoviesCount" />
+    <a-input-search
+      placeholder="input search movie"
+      enter-button
+      class="inputSearch"
+      @search="onSearch"
+      v-model="name"
+    />
+    <a-pagination class="pagination" :total="foundMoviesCount" v-model="current" />
     <SearchCards class="cardsWrapper" :movies="foundMovies" />
   </div>
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import { mapGetters, mapActions } from 'vuex'
   import SearchCards from '../../components/Cards/SearchCards.vue'
 
-  export default {
+  interface Data {
+    current: number | null | undefined
+    name: string | null | undefined
+  }
+
+  export default Vue.extend<Data, any, any>({
     name: 'search',
-    computed: mapGetters(['foundMovies', 'foundMoviesCount']),
+    data: () => ({
+      current: null,
+      name: null
+    }),
+    computed: mapGetters(['nameMovie', 'pageNumber', 'foundMovies', 'foundMoviesCount']),
     components: {
       SearchCards
     },
     methods: {
-      ...mapActions(['getMovies']),
-      onSearch(e: any) {
+      ...mapActions(['getNameMovie', 'getPageNumber', 'getMovies']),
+      onSearch(name: any) {
         const payload = {
-          name: e,
+          name,
           isWith: true,
-          page: 1
+          page: this.current
         }
-        console.log(payload)
         this.getMovies(payload)
+        this.getNameMovie(name)
+        this.current = 1
+        this.getPageNumber(this.current)
       }
+    },
+    watch: {
+      current: function (item: any) {
+        const payload = {
+          name: this.name,
+          isWith: true,
+          page: this.current
+        }
+        this.getMovies(payload)
+        this.getPageNumber(this.current)
+      }
+    },
+    mounted() {
+      this.name = this.nameMovie
+      this.current = this.pageNumber
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>
