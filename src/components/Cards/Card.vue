@@ -27,11 +27,10 @@
   }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .card {
+    position: relative;
     width: 150px;
     margin: 10px;
   }
-
-  /* .ant-card-bordered  */
 </style>

@@ -1,13 +1,13 @@
 <template>
   <div class="profilePage">
-    <Cards :profileMovies="profileMovies" />
+    <ProfileCards :movies="profileMovies" />
   </div>
 </template>
 
 <script lang="ts">
   import Vue from 'vue'
   import { mapGetters, mapActions } from 'vuex'
-  import Cards from '../../components/Cards/index.vue'
+  import ProfileCards from '../../components/Cards/ProfileCards.vue'
 
   interface Method {
     getProfileMovies: () => void
@@ -17,7 +17,7 @@
     name: 'profile',
     computed: mapGetters(['profileMovies', 'profileMoviesCount']),
     components: {
-      Cards
+      ProfileCards
     },
     methods: mapActions(['getProfileMovies']),
     async mounted() {

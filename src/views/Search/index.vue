@@ -2,19 +2,19 @@
   <div class="searchWrapper">
     <a-input-search placeholder="input search text" enter-button class="inputSearch" @search="onSearch" />
     <a-pagination class="pagination" :default-current="6" :total="foundMoviesCount" />
-    <Cards class="cardsWrapper" :profileMovies="foundMovies" />
+    <SearchCards class="cardsWrapper" :movies="foundMovies" />
   </div>
 </template>
 
 <script lang="ts">
   import { mapGetters, mapActions } from 'vuex'
-  import Cards from '../../components/Cards/index.vue'
+  import SearchCards from '../../components/Cards/SearchCards.vue'
 
   export default {
     name: 'search',
     computed: mapGetters(['foundMovies', 'foundMoviesCount']),
     components: {
-      Cards
+      SearchCards
     },
     methods: {
       ...mapActions(['getMovies']),

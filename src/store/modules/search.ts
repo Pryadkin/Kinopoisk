@@ -26,6 +26,7 @@ export const search: State = {
   },
   mutations: {
     updateFoundMovies(state: any, results: any) {
+      console.log(results)
       return (state.foundMovies = results)
     },
     updateFoundMoviesCount(state: any, count: any) {
