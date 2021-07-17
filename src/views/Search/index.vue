@@ -7,7 +7,9 @@
       @search="onSearch"
       v-model="name"
     />
-    <a-pagination class="pagination" :total="foundMoviesCount" v-model="current" />
+
+    <a-pagination class="pagination" :total="foundMoviesCount" v-model="pageHumber" />
+
     <SearchCards class="cardsWrapper" :movies="foundMovies" />
   </div>
 </template>
@@ -18,14 +20,14 @@
   import SearchCards from '../../components/Cards/SearchCards.vue'
 
   interface Data {
-    current: number | null | undefined
+    pageHumber: number | null | undefined
     name: string | null | undefined
   }
 
   export default Vue.extend<Data, any, any>({
     name: 'search',
     data: () => ({
-      current: null,
+      pageHumber: null,
       name: null
     }),
     computed: mapGetters(['nameMovie', 'pageNumber', 'foundMovies', 'foundMoviesCount']),
@@ -35,31 +37,42 @@
     methods: {
       ...mapActions(['getNameMovie', 'getPageNumber', 'getMovies']),
       onSearch(name: any) {
-        const payload = {
-          name,
-          isWith: true,
-          page: this.current
+        if (name.length > 0) {
+          const payload = {
+            name,
+            isWith: true,
+            page: this.pageHumber
+          }
+          this.getMovies(payload)
+          this.getNameMovie(name)
+          this.pageHumber = 1
+          this.getPageNumber(this.pageHumber)
+        } else {
+          const h = this.$createElement
+          this.$info({
+            title: 'Enter the title of the movie',
+            // eslint-disable-next-line
+            onOk() {}
+          })
         }
-        this.getMovies(payload)
-        this.getNameMovie(name)
-        this.current = 1
-        this.getPageNumber(this.current)
       }
     },
     watch: {
-      current: function (item: any) {
-        const payload = {
-          name: this.name,
-          isWith: true,
-          page: this.current
+      pageHumber: function (item: any) {
+        if (this.name) {
+          const payload = {
+            name: this.name,
+            isWith: true,
+            page: this.pageHumber
+          }
+          this.getMovies(payload)
+          this.getPageNumber(this.pageHumber)
         }
-        this.getMovies(payload)
-        this.getPageNumber(this.current)
       }
     },
     mounted() {
       this.name = this.nameMovie
-      this.current = this.pageNumber
+      this.pageHumber = this.pageNumber
     }
   })
 </script>

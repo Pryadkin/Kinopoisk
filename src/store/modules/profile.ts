@@ -16,17 +16,40 @@ export interface State {
   getters: any
 }
 
+function getMovieFromStorage() {
+  const jsonMovies = localStorage.getItem('movies')
+  return jsonMovies && JSON.parse(jsonMovies)
+}
+
+function addMovieToStorage(state: any, movie: any) {
+  const movies = [movie, ...state.profileMovies]
+  const jsonMovies = JSON.stringify(movies)
+  localStorage.setItem('movies', jsonMovies)
+}
+
+function removeMovieFromStorage(state: any, newMovies: number) {
+  const jsonMovies = JSON.stringify(newMovies)
+  localStorage.setItem('movies', jsonMovies)
+}
+
 export const profile: State = {
   actions: {
-    getProfileMovies(ctx: any) {
-      console.log(jsonMovies)
-      ctx.commit('updateProfileMovies', jsonMovies)
+    getProfileMovies({ commit }) {
+      commit('updateProfileMovies', getMovieFromStorage())
     },
-    addMovieToProfile(ctx: any, movie: any) {
-      ctx.commit('addMovieToProfileMutation', movie)
+    addMovieToProfile({ commit, state }, movie: any) {
+      if (!state.profileMovies?.find((item: any) => item.id === movie.id)) {
+        movie.filter = []
+
+        addMovieToStorage(state, movie)
+        commit('addMovieToProfileMutation', movie)
+      }
     },
-    removeMovieFromProfile(ctx: any, id: number) {
-      ctx.commit('removeMovieFromProfileMutation', id)
+    removeMovieFromProfile({ commit, state }, id: number) {
+      const newMovies = state.profileMovies.filter((item: any) => item.id !== id)
+
+      removeMovieFromStorage(state, newMovies)
+      commit('removeMovieFromProfileMutation', newMovies)
     }
   },
   mutations: {
@@ -35,14 +58,12 @@ export const profile: State = {
       state.stackProfileMovies = profileMovies
     },
     addMovieToProfileMutation(state: any, movie: any) {
-      movie.filter = []
-
       state.profileMovies = [movie, ...state.profileMovies]
       state.stackProfileMovies = [movie, ...state.stackProfileMovies]
     },
-    removeMovieFromProfileMutation(state: any, id: number) {
-      state.profileMovies = state.profileMovies.filter((item: any) => item.id !== id)
-      state.stackProfileMovies = state.stackProfileMovies.filter((item: any) => item.id !== id)
+    removeMovieFromProfileMutation(state: any, newMovies: any) {
+      state.profileMovies = newMovies
+      state.stackProfileMovies = newMovies
     }
   },
   state: {

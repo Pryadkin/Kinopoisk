@@ -3,7 +3,8 @@
     <div class="cards_container">
       <div class="row" v-for="movie in getMovies" :key="movie.id">
         <Card v-bind:movie="movie" />
-        <div class="cardCloseIcon" @click="removeFromProfile(movie.id)">remove</div>
+        <div class="removeIcon" @click="removeModal(movie.id)">remove</div>
+        <div class="filterIcon" @click="openFilterModal(movie.id)">filter</div>
       </div>
     </div>
   </div>
@@ -30,6 +31,17 @@
       ...mapActions(['removeMovieFromProfile']),
       removeFromProfile(id: number) {
         this.removeMovieFromProfile(id)
+      },
+      removeModal(id: number) {
+        this.$confirm({
+          title: 'Do you want to delete these movie?',
+          content: '',
+          onOk: () => {
+            this.removeFromProfile(id)
+          },
+          // eslint-disable-next-line
+          onCancel() {}
+        })
       }
     }
   })
@@ -46,15 +58,15 @@
     margin-left: 5px;
     margin-right: 5px;
 
-    &:hover > .cardCloseIcon {
+    &:hover .removeIcon,
+    &:hover .filterIcon {
       display: block;
     }
 
-    .cardCloseIcon {
+    .removeIcon,
+    .filterIcon {
       display: none;
       position: absolute;
-      top: 33px;
-      right: -29px;
       text-transform: uppercase;
       transform: rotate(90deg);
       background-color: rgb(80, 80, 245);
@@ -68,6 +80,16 @@
       &:hover {
         background-color: rgb(224, 44, 44);
       }
+    }
+
+    .removeIcon {
+      top: 33px;
+      right: -29px;
+    }
+
+    .filterIcon {
+      top: 100px;
+      right: -23px;
     }
   }
 </style>

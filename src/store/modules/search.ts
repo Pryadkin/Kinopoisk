@@ -22,7 +22,6 @@ export const search: State = {
       ctx.commit('updateNameMovie', name)
     },
     getPageNumber(ctx: any, page: number) {
-      console.log(page)
       ctx.commit('updatePageNumber', page)
     },
     async getMovies(ctx: any, payload: any) {
@@ -40,7 +39,6 @@ export const search: State = {
       state.nameMovie = name
     },
     updatePageNumber(state: any, page: number) {
-      console.log(page)
       state.pageNumber = page
     },
     updateFoundMovies(state: any, results: any) {
@@ -51,7 +49,7 @@ export const search: State = {
     }
   },
   state: {
-    nameMovie: null,
+    nameMovie: 'one',
     pageNumber: 1,
     foundMovies: [],
     foundMoviesCount: 0
