@@ -4,20 +4,38 @@
       <div class="row" v-for="movie in getMovies" :key="movie.id">
         <Card v-bind:movie="movie" />
         <div class="removeIcon" @click="removeModal(movie.id)">remove</div>
-        <div class="filterIcon" @click="openFilterModal(movie.id)">filter</div>
+        <div class="filterIcon" @click="openFilterModal(movie)">filter</div>
       </div>
     </div>
+    <a-modal v-model="visible" title="Basic Modal" @ok="handleOk">
+      <a-form-model>
+        <a-form-model-item label="Activity zone">
+          <a-select placeholder="please select your zone">
+            <template v-for="filter in movie.filters">
+              <a-select-option :key="filter.id" :value="filter.name">{{ filter.name }}</a-select-option>
+            </template>
+          </a-select>
+        </a-form-model-item>
+      </a-form-model>
+    </a-modal>
   </div>
 </template>
 
 <script lang="ts">
   import Vue from 'vue'
   import Card from './Card.vue'
-  import { mapActions } from 'vuex'
 
   export default Vue.extend<any, any, any, any>({
     props: {
-      movies: Array
+      movies: Array,
+      filters: Array,
+      removeMovieAction: Function
+    },
+    data() {
+      return {
+        visible: false,
+        movie: {}
+      }
     },
     components: {
       Card
@@ -28,20 +46,24 @@
       }
     },
     methods: {
-      ...mapActions(['removeMovieFromProfile']),
-      removeFromProfile(id: number) {
-        this.removeMovieFromProfile(id)
-      },
       removeModal(id: number) {
         this.$confirm({
           title: 'Do you want to delete these movie?',
           content: '',
           onOk: () => {
-            this.removeFromProfile(id)
+            this.removeMovieAction(id)
           },
           // eslint-disable-next-line
           onCancel() {}
         })
+      },
+      openFilterModal(movie: any) {
+        this.movie = movie
+        this.visible = true
+      },
+      handleOk(e: any) {
+        console.log(e)
+        this.visible = false
       }
     }
   })
