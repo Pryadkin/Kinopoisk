@@ -4,17 +4,19 @@
       <div class="row" v-for="movie in getMovies" :key="movie.id">
         <Card v-bind:movie="movie" />
         <div class="removeIcon" @click="removeModal(movie.id)">remove</div>
-        <div class="filterIcon" @click="openFilterModal(movie)">filter</div>
+        <div class="filterIcon" @click="openFilterModal(movie.filters)">filter</div>
       </div>
     </div>
     <a-modal v-model="visible" title="Basic Modal" @ok="handleOk">
       <a-form-model>
-        <a-form-model-item label="Activity zone">
-          <a-select placeholder="please select your zone">
-            <template v-for="filter in movie.filters">
-              <a-select-option :key="filter.id" :value="filter.name">{{ filter.name }}</a-select-option>
-            </template>
+        <a-form-model-item label="Existing filters">
+          <a-select placeholder="please select your zone" v-model="selected">
+            <a-select-option v-for="filter in filters" :key="filter.id" :value="filter.name">
+              {{ filter.name }}
+            </a-select-option>
           </a-select>
+
+          <Filtation />
         </a-form-model-item>
       </a-form-model>
     </a-modal>
@@ -24,21 +26,23 @@
 <script lang="ts">
   import Vue from 'vue'
   import Card from './Card.vue'
+  import Filtation from '../Filtration/index.vue'
 
   export default Vue.extend<any, any, any, any>({
     props: {
       movies: Array,
-      filters: Array,
       removeMovieAction: Function
     },
     data() {
       return {
         visible: false,
-        movie: {}
+        filters: [],
+        selected: undefined
       }
     },
     components: {
-      Card
+      Card,
+      Filtation
     },
     computed: {
       getMovies() {
@@ -57,12 +61,12 @@
           onCancel() {}
         })
       },
-      openFilterModal(movie: any) {
-        this.movie = movie
+      openFilterModal(filters: any) {
+        this.filters = filters
         this.visible = true
       },
       handleOk(e: any) {
-        console.log(e)
+        this.selected = undefined
         this.visible = false
       }
     }

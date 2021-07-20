@@ -3,7 +3,7 @@
   "trailingComma": "none",
   "singleQuote": true,
   "semi": false,
-  "printWidth": 120,
+  "printWidth": 80,
   "jsxSingleQuote": true,
   "editor.tabSize": 2,
   "editor.insertSpaces": true,

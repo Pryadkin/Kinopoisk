@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { profile } from './modules/profile'
 import { search } from './modules/search'
-import { filters } from './modules/filters'
+import { filters } from './modules/filters/filters'
 
 Vue.use(Vuex)
 

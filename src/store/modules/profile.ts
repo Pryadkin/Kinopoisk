@@ -27,8 +27,8 @@ function addMovieToStorage(state: any, movie: any) {
   localStorage.setItem('movies', jsonMovies)
 }
 
-function removeMovieFromStorage(state: any, newMovies: number) {
-  const jsonMovies = JSON.stringify(newMovies)
+function removeMovieFromStorage(filteredMovies: number) {
+  const jsonMovies = JSON.stringify(filteredMovies)
   localStorage.setItem('movies', jsonMovies)
 }
 
@@ -46,10 +46,12 @@ export const profile: State = {
       }
     },
     removeMovieFromProfile({ commit, state }, id: number) {
-      const newMovies = state.profileMovies.filter((item: any) => item.id !== id)
+      const filteredMovies = state.profileMovies.filter(
+        (item: any) => item.id !== id
+      )
 
-      removeMovieFromStorage(state, newMovies)
-      commit('removeMovieFromProfileMutation', newMovies)
+      removeMovieFromStorage(filteredMovies)
+      commit('removeMovieFromProfileMutation', filteredMovies)
     }
   },
   mutations: {
@@ -61,9 +63,9 @@ export const profile: State = {
       state.profileMovies = [movie, ...state.profileMovies]
       state.stackProfileMovies = [movie, ...state.stackProfileMovies]
     },
-    removeMovieFromProfileMutation(state: any, newMovies: any) {
-      state.profileMovies = newMovies
-      state.stackProfileMovies = newMovies
+    removeMovieFromProfileMutation(state: any, filteredMovies: any) {
+      state.profileMovies = filteredMovies
+      state.stackProfileMovies = filteredMovies
     }
   },
   state: {
