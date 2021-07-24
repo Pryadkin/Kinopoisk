@@ -1,6 +1,9 @@
 <template>
   <div class="profilePage">
-    <ProfileCards :movies="profileMovies" :removeMovieAction="removeMovieFromProfile" :filters="filters" />
+    <ProfileCards
+      :movies="profileMovies"
+      :removeMovieAction="removeMovieFromProfile"
+    />
   </div>
 </template>
 
@@ -15,7 +18,7 @@
 
   export default Vue.extend<any, any, any, Method>({
     name: 'profile',
-    computed: mapGetters(['profileMovies', 'profileMoviesCount', 'filters']),
+    computed: mapGetters(['profileMovies', 'profileMoviesCount']),
     components: {
       ProfileCards
     },

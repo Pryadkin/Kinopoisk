@@ -1,4 +1,3 @@
-import jsonMovies from '../../assets/profileMovies.json'
 import { FetchMovies } from '../../api/apiTypes'
 
 export interface State {
