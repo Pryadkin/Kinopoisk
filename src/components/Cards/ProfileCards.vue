@@ -4,14 +4,21 @@
       <div class="row" v-for="movie in getMovies" :key="movie.id">
         <Card v-bind:movie="movie" />
         <div class="removeIcon" @click="removeModal(movie.id)">remove</div>
-        <div class="filterIcon" @click="openFilterModal(movie.filters)">filter</div>
+        <div class="filterIcon" @click="openFilterModal(movie.filters)">
+          filter
+        </div>
       </div>
     </div>
-    <a-modal v-model="visible" title="Basic Modal" @ok="handleOk">
+
+    <a-modal v-model="visible" title="Filtration" @ok="handleOk">
       <a-form-model>
         <a-form-model-item label="Existing filters">
           <a-select placeholder="please select your zone" v-model="selected">
-            <a-select-option v-for="filter in filters" :key="filter.id" :value="filter.name">
+            <a-select-option
+              v-for="filter in filters"
+              :key="filter.id"
+              :value="filter.name"
+            >
               {{ filter.name }}
             </a-select-option>
           </a-select>

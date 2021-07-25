@@ -1,4 +1,6 @@
 import { Filter } from './filtersType'
+import _ from 'lodash'
+import jsonMovies from '../../../assets/profileMovies.json'
 
 export interface State {
   actions: {
@@ -17,6 +19,47 @@ export interface State {
     filters: Filter[]
   }
   getters: any
+}
+
+function setNewFilter(
+  filter: any,
+  i: number,
+  filters: any,
+  onePath = filter.path,
+  twoPath = null
+): any {
+  // console.log(filter, i, filters, onePath, twoPath)
+  // console.log(filter.path, filters[i - 1])
+  // console.log(filter.path, filters[i - 1] && filters[i - 1].path)
+  // if (filter.path.includes('/')) {
+  //   return {
+  //     id: filter.id,
+  //     name: filter.name,
+  //     path: filter.path,
+  //     isOpen: false,
+  //     filters: setNewFilter(filter, index + 1)
+  //   }
+  // }
+}
+
+function getFiltersFromMovies(movies: any) {
+  const filters = movies.map((movie: any) => {
+    return Object.values(movie.filters)
+  })
+  const allFilters = _.flattenDeep(filters)
+  const uniqFiltes = _.uniqBy(allFilters, 'id')
+  // const uniqSortFilters = _.sortedIndexBy(uniqFiltes, 'path')
+  const uniqSortFilters = uniqFiltes.sort((a: any, b: any) => {
+    return a.path.localeCompare(b.path)
+  })
+  // console.log(uniqSortFilters)
+  const func = uniqSortFilters.map(
+    (filter: any, index: number, filters: any) => {
+      return setNewFilter(filter, index, filters)
+    }
+  )
+
+  console.log(func)
 }
 
 function getFiltersFromStorage() {
@@ -51,7 +94,8 @@ function getFiltration(filters: Filter[], id: number): any {
 
 export const filters: State = {
   actions: {
-    getFilters({ commit }) {
+    getFilters({ commit, rootState }) {
+      getFiltersFromMovies(rootState.profile.profileMovies)
       commit('updateFilters', getFiltersFromStorage())
     },
     addFilter({ commit, state }, filter: Filter) {
