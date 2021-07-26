@@ -10,12 +10,17 @@
       </div>
     </div>
 
-    <a-modal v-model="visible" title="Filtration" @ok="handleOk">
+    <a-modal
+      v-model="visible"
+      title="Filtration"
+      @ok="handleOk"
+      @cancel="handleCancel"
+    >
       <a-form-model>
         <a-form-model-item label="Existing filters">
           <a-select placeholder="please select your zone" v-model="selected">
             <a-select-option
-              v-for="filter in filters"
+              v-for="filter in movieFilters"
               :key="filter.id"
               :value="filter.name"
             >
@@ -23,7 +28,7 @@
             </a-select-option>
           </a-select>
 
-          <Filtation />
+          <Filtation :treeFilters="treeFilters" :mode="mode" />
         </a-form-model-item>
       </a-form-model>
     </a-modal>
@@ -34,6 +39,8 @@
   import Vue from 'vue'
   import Card from './Card.vue'
   import Filtation from '../Filtration/index.vue'
+  import { mapGetters, mapActions } from 'vuex'
+  import { copyByJson } from '../../common/utils'
 
   export default Vue.extend<any, any, any, any>({
     props: {
@@ -43,20 +50,27 @@
     data() {
       return {
         visible: false,
-        filters: [],
-        selected: undefined
+        movieFilters: [],
+        selected: undefined,
+        treeFilters: [],
+        mode: 'edit'
       }
+
+
+      
     },
     components: {
       Card,
       Filtation
     },
     computed: {
+      ...mapGetters(['filters']),
       getMovies() {
         return this.movies
       }
     },
     methods: {
+      ...mapActions(['getFilters', 'updateFilters']),
       removeModal(id: number) {
         this.$confirm({
           title: 'Do you want to delete these movie?',
@@ -69,13 +83,32 @@
         })
       },
       openFilterModal(filters: any) {
-        this.filters = filters
+        console.log(this.$store)
+        this.movieFilters = filters
         this.visible = true
+        this.treeFilters = copyByJson(this.filters)
       },
       handleOk(e: any) {
         this.selected = undefined
         this.visible = false
+        this.updateFilters(this.treeFilters)
+      },
+      handleCancel() {
+        this.$confirm({
+          title: 'Do you want to delete these changes?',
+          content: '',
+          onOk: () => {
+            this.visible = false
+          },
+          onCancel: () => {
+            this.visible = true
+          }
+        })
       }
+    },
+    mounted() {
+      // get filters from localStorage
+      // this.getFilters()
     }
   })
 </script>

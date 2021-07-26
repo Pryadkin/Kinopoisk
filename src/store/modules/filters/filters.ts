@@ -5,18 +5,17 @@ import jsonMovies from '../../../assets/profileMovies.json'
 export interface State {
   actions: {
     getFilters: (ctx: any) => void
-    addFilter: (ctx: any, filter: Filter) => void
+    updateFilters: (ctx: any, filters: Filter) => void
     removeFilter: (ctx: any, id: number) => void
     filterIsOpen: (ctx: any, id: number) => void
   }
   mutations: {
-    updateFilters: (state: any, filters: Filter) => void
-    addFilterMutation: (state: any, filters: Filter) => void
+    updateFiltersMutation: (state: any, filters: Filter) => void
     removeFilterMutation: (state: any, filters: Filter) => void
     filterIsOpenMutation: (state: any, filters: Filter) => void
   }
   state: {
-    filters: Filter[]
+    filters: any
   }
   getters: any
 }
@@ -67,8 +66,7 @@ function getFiltersFromStorage() {
   return jsonFilters && JSON.parse(jsonFilters)
 }
 
-function addFilterToStorage(state: any, filter: Filter) {
-  const filters = [filter, ...state.filters]
+function updateFilterStorage(state: any, filters: any) {
   const jsonFilters = JSON.stringify(filters)
   localStorage.setItem('filters', jsonFilters)
 }
@@ -95,14 +93,12 @@ function getFiltration(filters: Filter[], id: number): any {
 export const filters: State = {
   actions: {
     getFilters({ commit, rootState }) {
-      getFiltersFromMovies(rootState.profile.profileMovies)
-      commit('updateFilters', getFiltersFromStorage())
+      // getFiltersFromMovies(rootState.profile.profileMovies)
+      commit('updateFiltersMutation', getFiltersFromStorage())
     },
-    addFilter({ commit, state }, filter: Filter) {
-      if (!state.filters?.find((item: any) => item.id === filter.id)) {
-        addFilterToStorage(state, filter)
-        commit('addFilterMutation', filter)
-      }
+    updateFilters({ commit, state }, filters: Filter) {
+      updateFilterStorage(state, filters)
+      commit('updateFiltersMutation', filters)
     },
     removeFilter({ commit, state }, id: number) {
       const filteredFilters = state.filters.filter(
@@ -118,11 +114,8 @@ export const filters: State = {
     }
   },
   mutations: {
-    updateFilters(state, filters) {
+    updateFiltersMutation(state, filters) {
       state.filters = filters
-    },
-    addFilterMutation(state, filter) {
-      state.filters = [filter, ...state.filters]
     },
     removeFilterMutation(state, filteredFilters) {
       state.filters = filteredFilters
@@ -134,53 +127,10 @@ export const filters: State = {
   state: {
     filters: [
       {
-        filters: [
-          {
-            id: 34234,
-            name: 'subnew2',
-            path: 'new/subnew2'
-          },
-          {
-            id: 342454545634,
-            name: 'subnew2',
-            path: 'new/subnew2'
-          },
-          {
-            filters: [
-              {
-                id: 79545455554988,
-                name: 'new2',
-                path: 'new2'
-              }
-            ],
-            isOpen: false,
-            id: 79578687988,
-            name: 'new',
-            path: 'new'
-          }
-        ],
-        isOpen: false,
-        id: 795988,
+        id: 242342424,
         name: 'new',
-        path: 'new'
-      },
-      {
-        id: 795454988,
-        name: 'new2',
-        path: 'new2'
-      },
-      {
-        filters: [
-          {
-            id: 34234464,
-            name: 'subnew3',
-            path: 'new/subnew3'
-          }
-        ],
-        isOpen: false,
-        id: 43535,
-        name: 'new3',
-        path: 'new3'
+        path: 'new',
+        children: []
       }
     ]
   },

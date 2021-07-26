@@ -1,5 +1,5 @@
 <template>
-  <li>
+  <li :key="model.id">
     <div class="tree" :class="{ isFolder: isFolder }">
       <div class="filterName" v-show="!isInput" @dblclick="openInput">
         {{ model.name }} &nbsp;
@@ -37,7 +37,7 @@
         :key="index"
         :model="model"
       />
-      <li class="add">
+      <li class="add" :key="model.id">
         <a-button size="small" @click="addChild">add Item</a-button>
       </li>
     </ul>
@@ -50,7 +50,8 @@
     props: {
       model: {
         type: Object
-      }
+      },
+      mode: String
     },
     data() {
       return {
@@ -72,6 +73,7 @@
       },
       changeType(type) {
         if (type === 'add') {
+          // console.log(this.model.name)
           this.$set(this.model, 'children', [])
           this.addChild()
           this.open = true
@@ -84,13 +86,22 @@
       addChild() {
         this.model.children.push({
           id: Math.trunc(Math.random() * 10e5),
-          name: 'NEW ITEM'
+          name: 'NEW FILTER',
+          path: `${this.model.path}/newFilter`
         })
+        console.log(this.model.children)
       },
       delChild() {
-        this.$parent.model.children = this.$parent.model.children.filter(
-          (item) => item.id !== this.model.id
-        )
+        const filt = this.$parent.model.children.filter((item) => {
+          console.log(item.id !== this.model.id)
+          return item.id !== this.model.id
+        })
+        // console.log(filt)
+
+        // console.log(filt)
+        this.$nextTick(() => (this.$parent.model.children = filt))
+        console.log(this.$parent.model.children)
+        // this.$parent.model.children = copyByJson(filt)
       },
       openInput() {
         this.isInput = !this.isInput
