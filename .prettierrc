@@ -1,12 +1,11 @@
 {
   "useTabs": false,
+  "tabSize": 2,
+  "printWidth": 80,
   "trailingComma": "none",
   "singleQuote": true,
   "semi": false,
-  "printWidth": 80,
   "jsxSingleQuote": true,
-  "editor.tabSize": 2,
-  "editor.insertSpaces": true,
-  "vueIndentScriptAndStyle": true,
-  "editor.formatOnSave": true
+  "insertSpaces": true,
+  "vueIndentScriptAndStyle": true
 }

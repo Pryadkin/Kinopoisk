@@ -21,23 +21,30 @@
         {{ open ? '-' : '+' }}
       </a-button>
 
-      <a-radio-group size="small">
-        <a-radio-button v-if="!isFolder" @click="changeType('add')">
+      <a-radio-button v-if="!isFolder && !isEdit" @click="addToMovie(model)">
+        add to movie
+      </a-radio-button>
+
+      <a-radio-group size="small" v-if="isEdit">
+        <a-radio-button v-if="!isFolder" @click="addChild">
           add
         </a-radio-button>
-        <a-radio-button v-if="!isFolder" @click="changeType('del')">
+        <a-radio-button v-if="!isFolder" @click="delChild">
           del
         </a-radio-button>
       </a-radio-group>
     </div>
+
     <ul class="subFolder" v-show="open" v-if="isFolder">
       <Tree
         class="item"
-        v-for="(model, index) in model.children"
-        :key="index"
+        v-for="model in getModel"
+        :key="model.id"
         :model="model"
+        :isEdit="isEdit"
       />
-      <li class="add" :key="model.id">
+
+      <li class="add" :key="model.id" v-if="isEdit">
         <a-button size="small" @click="addChild">add Item</a-button>
       </li>
     </ul>
@@ -48,21 +55,37 @@
   export default {
     name: 'Tree',
     props: {
-      model: {
-        type: Object
-      },
-      mode: String
+      model: Object,
+      isEdit: Boolean
     },
     data() {
       return {
         open: false,
         isInput: false,
-        inputName: ''
+        inputName: '',
+        updateData: null
       }
     },
     computed: {
       isFolder() {
-        return this.model.children && this.model.children.length
+        return this.model.children.length
+      },
+      getModel() {
+        // console.log(this.filterByItem?.length !== this.model.children?.length)
+        // console.log(this.filterByItem)
+        // console.log(this.model?.children)
+        // if (
+        //   this.updateData &&
+        //   this.updateData?.length !== this.model.children?.length
+        // ) {
+        //   return this.updateData
+        // }
+
+        // console.log(this.model.children)
+
+        console.log(this.updateData)
+
+        return this.model.children
       }
     },
     methods: {
@@ -71,46 +94,49 @@
           this.open = !this.open
         }
       },
-      changeType(type) {
-        if (type === 'add') {
-          // console.log(this.model.name)
-          this.$set(this.model, 'children', [])
-          this.addChild()
-          this.open = true
-        }
-        if (type === 'del') {
-          this.$set(this.model, 'children', [])
-          this.delChild()
-        }
-      },
       addChild() {
-        this.model.children.push({
+        const newElem = {
           id: Math.trunc(Math.random() * 10e5),
           name: 'NEW FILTER',
-          path: `${this.model.path}/newFilter`
-        })
-        console.log(this.model.children)
+          path: `${this.model.path}/newFilter`,
+          children: []
+        }
+        this.model.children.push(newElem)
+        // this.$forceUpdate()
+
+        this.open = true
       },
       delChild() {
         const filt = this.$parent.model.children.filter((item) => {
-          console.log(item.id !== this.model.id)
           return item.id !== this.model.id
         })
-        // console.log(filt)
+        const newF = {
+          ...this.$parent.model,
+          children: filt
+        }
 
-        // console.log(filt)
-        this.$nextTick(() => (this.$parent.model.children = filt))
-        console.log(this.$parent.model.children)
-        // this.$parent.model.children = copyByJson(filt)
+        // this.$parent.model = newF
+        this.updateData = newF
+        this.$set(this.$parent, 'model', newF)
+
+        // this.updateData = {
+        //   ...this.$parent.model,
+        //   children: filt
+        // }
       },
       openInput() {
-        this.isInput = !this.isInput
-        this.inputName = this.model.name
-        this.$nextTick(() => this.$refs.inputRef.focus())
+        if (this.isEdit) {
+          this.isInput = !this.isInput
+          this.inputName = this.model.name
+          this.$nextTick(() => this.$refs.inputRef.focus())
+        }
       },
       renameFilter() {
         this.model.name = this.inputName
         this.isInput = !this.isInput
+      },
+      addToMovie(model) {
+        console.log(model)
       }
     }
   }

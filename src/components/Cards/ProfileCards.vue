@@ -28,7 +28,7 @@
             </a-select-option>
           </a-select>
 
-          <Filtation :treeFilters="treeFilters" :mode="mode" />
+          <Filtation :treeFilters="treeFilters" />
         </a-form-model-item>
       </a-form-model>
     </a-modal>
@@ -52,12 +52,8 @@
         visible: false,
         movieFilters: [],
         selected: undefined,
-        treeFilters: [],
-        mode: 'edit'
+        treeFilters: []
       }
-
-
-      
     },
     components: {
       Card,
@@ -88,7 +84,7 @@
         this.visible = true
         this.treeFilters = copyByJson(this.filters)
       },
-      handleOk(e: any) {
+      handleOk() {
         this.selected = undefined
         this.visible = false
         this.updateFilters(this.treeFilters)

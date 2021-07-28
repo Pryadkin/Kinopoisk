@@ -1,6 +1,12 @@
 <template>
   <div class="app">
-    <a-menu class="mainMenu" :default-selected-keys="['1']" :default-open-keys="['sub1']" :mode="mode" :theme="theme">
+    <a-menu
+      class="mainMenu"
+      :default-selected-keys="['1']"
+      :default-open-keys="['sub1']"
+      :mode="mode"
+      :theme="theme"
+    >
       <a-menu-item key="1" @click="$router.push({ name: 'Profile' })">
         <a-icon type="home" />
         My movies

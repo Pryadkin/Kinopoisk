@@ -1,19 +1,30 @@
 <template>
   <div>
+    <a-switch @change="onChange" />
+    <span :style="{ padding: '10px' }">edit mode</span>
+
     <div class="filtersContainer">
-      <NewFilter :model="filters" :mode="mode" />
+      <NewFilter :model="filters" :isEdit="isEdit" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
   import Vue from 'vue'
-  import NewFilter from './NewFilter.vue'
+  import NewFilter from './Filter.vue'
 
-  export default Vue.extend({
+  interface Data {
+    isEdit: boolean
+  }
+
+  export default Vue.extend<Data, any, any, any>({
     props: {
-      treeFilters: Array,
-      mode: String
+      treeFilters: Array
+    },
+    data() {
+      return {
+        isEdit: true
+      }
     },
     components: {
       NewFilter
@@ -22,9 +33,14 @@
       filters() {
         return {
           name: 'Filters',
-          path: 'filters',
+          path: '',
           children: this.treeFilters
         }
+      }
+    },
+    methods: {
+      onChange(checked: boolean) {
+        this.isEdit = checked
       }
     }
   })
