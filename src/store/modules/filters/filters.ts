@@ -125,14 +125,11 @@ export const filters: State = {
     }
   },
   state: {
-    filters: [
-      {
-        id: 242342424,
-        name: 'new',
-        path: 'new',
-        children: []
-      }
-    ]
+    filters: {
+      name: 'rootFilters',
+      path: 'rootFilters',
+      children: []
+    }
   },
   getters: {
     filters(state: any) {

@@ -38,7 +38,7 @@
     <ul class="subFolder" v-show="open" v-if="isFolder">
       <Tree
         class="item"
-        v-for="model in getModel"
+        v-for="model in model.children"
         :key="model.id"
         :model="model"
         :isEdit="isEdit"
@@ -62,30 +62,12 @@
       return {
         open: false,
         isInput: false,
-        inputName: '',
-        updateData: null
+        inputName: ''
       }
     },
     computed: {
       isFolder() {
-        return this.model.children.length
-      },
-      getModel() {
-        // console.log(this.filterByItem?.length !== this.model.children?.length)
-        // console.log(this.filterByItem)
-        // console.log(this.model?.children)
-        // if (
-        //   this.updateData &&
-        //   this.updateData?.length !== this.model.children?.length
-        // ) {
-        //   return this.updateData
-        // }
-
-        // console.log(this.model.children)
-
-        console.log(this.updateData)
-
-        return this.model.children
+        return this.model.children?.length
       }
     },
     methods: {
@@ -101,28 +83,15 @@
           path: `${this.model.path}/newFilter`,
           children: []
         }
-        this.model.children.push(newElem)
-        // this.$forceUpdate()
 
+        this.model.children.push(newElem)
         this.open = true
       },
       delChild() {
-        const filt = this.$parent.model.children.filter((item) => {
-          return item.id !== this.model.id
-        })
-        const newF = {
-          ...this.$parent.model,
-          children: filt
-        }
-
-        // this.$parent.model = newF
-        this.updateData = newF
-        this.$set(this.$parent, 'model', newF)
-
-        // this.updateData = {
-        //   ...this.$parent.model,
-        //   children: filt
-        // }
+        this.$parent.model.children.splice(
+          this.$parent.model.children.indexOf(this.model),
+          1
+        )
       },
       openInput() {
         if (this.isEdit) {

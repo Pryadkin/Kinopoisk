@@ -4,7 +4,7 @@
     <span :style="{ padding: '10px' }">edit mode</span>
 
     <div class="filtersContainer">
-      <NewFilter :model="filters" :isEdit="isEdit" />
+      <NewFilter :model="treeFilters" :isEdit="isEdit" />
     </div>
   </div>
 </template>
@@ -19,24 +19,15 @@
 
   export default Vue.extend<Data, any, any, any>({
     props: {
-      treeFilters: Array
+      treeFilters: Object
     },
     data() {
       return {
-        isEdit: true
+        isEdit: false
       }
     },
     components: {
       NewFilter
-    },
-    computed: {
-      filters() {
-        return {
-          name: 'Filters',
-          path: '',
-          children: this.treeFilters
-        }
-      }
     },
     methods: {
       onChange(checked: boolean) {

@@ -79,7 +79,6 @@
         })
       },
       openFilterModal(filters: any) {
-        console.log(this.$store)
         this.movieFilters = filters
         this.visible = true
         this.treeFilters = copyByJson(this.filters)
