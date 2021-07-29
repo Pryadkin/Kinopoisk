@@ -52,6 +52,9 @@
 </template>
 
 <script>
+  import { copyByJson } from '../../common/utils'
+  import { updateFilterPath } from './func'
+
   export default {
     name: 'Tree',
     props: {
@@ -101,11 +104,33 @@
         }
       },
       renameFilter() {
-        this.model.name = this.inputName
+        const updateFilter = updateFilterPath(
+          this.inputName,
+          copyByJson(this.model)
+        )
+
+        console.log(updateFilter)
+
+        this.model = {
+          ...updateFilter
+        }
         this.isInput = !this.isInput
       },
-      addToMovie(model) {
-        console.log(model)
+      renameFunc(parentPath, models) {
+        console.log(models)
+        return models.map((item) => {
+          console.log(item)
+          const newPath = [parentPath, item.path].join('/')
+
+          return {
+            ...item,
+            path: newPath,
+            children: this.renameFunc(newPath, item.children)
+          }
+        })
+      },
+      addToMovie() {
+        console.log(this.model)
       }
     }
   }

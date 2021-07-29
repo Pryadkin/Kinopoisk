@@ -127,8 +127,42 @@ export const filters: State = {
   state: {
     filters: {
       name: 'rootFilters',
-      path: 'rootFilters',
-      children: []
+      path: '',
+      children: [
+        {
+          id: 9808080485345,
+          name: 'filter22',
+          path: 'filter22',
+          children: [
+            {
+              id: 4365745646,
+              name: 'filter33',
+              path: 'filter22/filter33',
+              children: [
+                {
+                  id: 436574534545646,
+                  name: 'filter44',
+                  path: 'filter22/filter33/filter44',
+                  children: []
+                },
+                {
+                  id: 46666665646,
+                  name: 'filter44.2',
+                  path: 'filter22/filter33/filter44.2',
+                  children: [
+                    {
+                      id: 6666666777,
+                      name: 'filter55',
+                      path: 'filter22/filter33/filter44/filter55',
+                      children: []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   },
   getters: {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-switch @change="onChange" />
+    <a-switch default-checked @change="onChange" />
     <span :style="{ padding: '10px' }">edit mode</span>
 
     <div class="filtersContainer">
@@ -23,7 +23,7 @@
     },
     data() {
       return {
-        isEdit: false
+        isEdit: true
       }
     },
     components: {
