@@ -1,7 +1,15 @@
 <template>
   <li :key="model.id">
     <div class="tree" :class="{ isFolder: isFolder }">
-      <div class="filterName" v-show="!isInput" @dblclick="openInput">
+      <div class="filterName" v-show="!isInput && isEdit" @dblclick="openInput">
+        {{ model.name }} &nbsp;
+      </div>
+
+      <div
+        class="filterName"
+        v-show="!isInput && !isEdit"
+        @click="addToMovie(model)"
+      >
         {{ model.name }} &nbsp;
       </div>
 
@@ -21,10 +29,6 @@
         {{ open ? '-' : '+' }}
       </a-button>
 
-      <a-radio-button v-if="!isFolder && !isEdit" @click="addToMovie(model)">
-        add to movie
-      </a-radio-button>
-
       <a-radio-group size="small" v-if="isEdit">
         <a-radio-button v-if="!isFolder" @click="addChild">
           add
@@ -38,7 +42,7 @@
     <ul class="subFolder" v-show="open" v-if="isFolder">
       <Tree
         class="item"
-        v-for="model in model.children"
+        v-for="model in updateModel"
         :key="model.id"
         :model="model"
         :isEdit="isEdit"
@@ -54,6 +58,7 @@
 <script>
   import { copyByJson } from '../../common/utils'
   import { updateFilterPath } from './func'
+  import { mapGetters, mapActions } from 'vuex'
 
   export default {
     name: 'Tree',
@@ -69,11 +74,16 @@
       }
     },
     computed: {
+      ...mapGetters(['filterableMovie']),
       isFolder() {
         return this.model.children?.length
+      },
+      updateModel() {
+        return this.model.children
       }
     },
     methods: {
+      ...mapActions(['setFilterableMovie']),
       toggle() {
         if (this.isFolder) {
           this.open = !this.open
@@ -109,28 +119,23 @@
           copyByJson(this.model)
         )
 
-        console.log(updateFilter)
-
         this.model = {
           ...updateFilter
         }
         this.isInput = !this.isInput
       },
-      renameFunc(parentPath, models) {
-        console.log(models)
-        return models.map((item) => {
-          console.log(item)
-          const newPath = [parentPath, item.path].join('/')
-
-          return {
-            ...item,
-            path: newPath,
-            children: this.renameFunc(newPath, item.children)
-          }
-        })
-      },
       addToMovie() {
-        console.log(this.model)
+        const adoptFilter = {
+          id: this.model.id,
+          name: this.model.name,
+          path: this.model.path
+        }
+        const idArray = this.filterableMovie.filters.map((item) => item.id)
+
+        if (!idArray.includes(this.model.id)) {
+          this.filterableMovie.filters.push(adoptFilter)
+          this.setFilterableMovie(this.filterableMovie)
+        }
       }
     }
   }
@@ -152,6 +157,11 @@
 
   .filterName {
     display: inline-block;
+    cursor: pointer;
+
+    &:hover {
+      color: green;
+    }
   }
 
   .subFolder {

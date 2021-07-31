@@ -4,9 +4,7 @@
       <div class="row" v-for="movie in getMovies" :key="movie.id">
         <Card v-bind:movie="movie" />
         <div class="removeIcon" @click="removeModal(movie.id)">remove</div>
-        <div class="filterIcon" @click="openFilterModal(movie.filters)">
-          filter
-        </div>
+        <div class="filterIcon" @click="openFilterModal(movie)">filter</div>
       </div>
     </div>
 
@@ -22,9 +20,9 @@
             <a-select-option
               v-for="filter in movieFilters"
               :key="filter.id"
-              :value="filter.name"
+              :value="filter.path"
             >
-              {{ filter.name }}
+              {{ filter.path }}
             </a-select-option>
           </a-select>
 
@@ -60,13 +58,18 @@
       Filtation
     },
     computed: {
-      ...mapGetters(['filters']),
+      ...mapGetters(['filters', 'filterableMovie']),
       getMovies() {
         return this.movies
       }
     },
     methods: {
-      ...mapActions(['getFilters', 'updateFilters']),
+      ...mapActions([
+        'getFilters',
+        'updateFilters',
+        'setFilterableMovie',
+        'setProfileMovies'
+      ]),
       removeModal(id: number) {
         this.$confirm({
           title: 'Do you want to delete these movie?',
@@ -78,15 +81,17 @@
           onCancel() {}
         })
       },
-      openFilterModal(filters: any) {
-        this.movieFilters = filters
+      openFilterModal(movie: any) {
+        this.movieFilters = movie.filters
         this.visible = true
         this.treeFilters = copyByJson(this.filters)
+        this.setFilterableMovie(movie)
       },
       handleOk() {
         this.selected = undefined
         this.visible = false
         this.updateFilters(this.treeFilters)
+        this.setProfileMovies()
       },
       handleCancel() {
         this.$confirm({
@@ -103,7 +108,7 @@
     },
     mounted() {
       // get filters from localStorage
-      // this.getFilters()
+      this.getFilters()
     }
   })
 </script>
